@@ -3,6 +3,8 @@ import tensorflow as tf
 from PIL import Image
 import numpy as np
 import os
+import webbrowser
+import threading
 
 app = Flask(__name__)
 model = tf.keras.models.load_model('model/model.h5')
@@ -11,6 +13,9 @@ UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 class_names = ['airplane','automobile','bird','cat','deer','dog','frog','horse','ship','truck']
+
+def open_browser():
+    webbrowser.open_new('http://127.0.0.1:5000/')
 
 def prepare_image(image_path):
     img = Image.open(image_path).resize((32,32))
@@ -36,4 +41,5 @@ def index():
     return render_template('index.html', prediction=prediction)
 
 if __name__ == '__main__':
+    threading.Timer(0.1, open_browser).start()
     app.run(debug=True)
